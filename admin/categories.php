@@ -1,6 +1,7 @@
 
 
-<?php include "includes/admin_header.php";?>
+<?php include "includes/admin_header.php";
+include "../includes/db.php";?>
 
 <div id="wrapper">
 
@@ -19,9 +20,34 @@
                         <small>To the admin panel</small>
                     </h1>
                     <div class="col-xs-6">
-                        <form action="">
+                        <?php
+                            if(isset($_POST['submit'])){
+                                $catName = $_POST['catName'];
+                                if ($catName == "" || empty($catName)){
+                                    echo "Field required";
+                                }else{
+                                    $query = "SELECT * FROM category WHERE catName LIKE '%$catName%'";
+                                    $search_query = mysqli_query($connection, $query);
+                                    if(!$search_query){
+                                        die("SORRY, CONNECTION FAILED");
+                                    }
+                                    $count = mysqli_num_rows($search_query);
+                                    if ($count == 0){
+                                        $insert_query = "INSERT INTO category(catName) VALUE ('{$catName}')";
+                                        $create_category = mysqli_query($connection, $insert_query);
+                                        if(!$create_category){
+                                            die("SORRY, NEW CATEGORY COULDN'T BE CREATED");
+                                        }
+                                    }else{
+                                        echo "Sorry, {$catName}, already exists";
+                                    }
+                                }
+                            }
+                        ?>
+                        <form action="" method="post">
                             <div class="form-group">
-                                <input type="text" name="cat_title">
+                                <label>Category</label>
+                                <input type="text" name="catName">
                             </div>
                             <div class="form-group">
                                 <input class="btn btn-primary" type="submit" name="submit" value="Add category">
@@ -30,7 +56,6 @@
                     </div>
                     <div class="col-xs-6">
                         <?php
-                        include "../includes/db.php";
                             $query = "SELECT * FROM category";
                             $select_categories = mysqli_query($connection, $query);
 
