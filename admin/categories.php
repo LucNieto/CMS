@@ -55,31 +55,37 @@ include "../includes/db.php";?>
                         </form>
                     </div>
                     <div class="col-xs-6">
-                        <?php
-                            $query = "SELECT * FROM category";
-                            $select_categories = mysqli_query($connection, $query);
-
-                        ?>
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Title</th>
+                                <th>Delete</th>
+<!--                                <th>Update</th>-->
                             </tr>
                             </thead>
                             <tbody>
                                 <?php
+                                $query = "SELECT * FROM category";
+                                $select_categories = mysqli_query($connection, $query);
                                     while ($row = mysqli_fetch_assoc($select_categories)){
                                         $id = $row['catID'];
                                         $name = $row['catName'];
                                         echo "<tr>";
                                         echo "<td>{$id}</td>";
                                         echo "<td>{$name}</td>";
+                                        echo "<td ><a  href='categories.php?delete={$id}'><span class='glyphicon glyphicon-trash'></a></span></td>";
                                         echo "</tr>";
                                         }
                                 ?>
-
-
+                                <?php
+                                    if (isset($_GET['delete'])){
+                                        $selected_id = $_GET['delete'];
+                                        $query = "DELETE FROM category WHERE catID = {$selected_id} ";
+                                        $delete_query = mysqli_query($connection, $query);
+                                        header("Location: categories.php");
+                                    }
+                                ?>
                             </tr>
                             </tbody>
                         </table>
