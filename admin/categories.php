@@ -53,6 +53,14 @@ include "../includes/db.php";?>
                                 <input class="btn btn-primary" type="submit" name="submit" value="Add category">
                             </div>
                         </form>
+
+                         <?php
+                         if (isset($_GET['edit'])){
+                             $cat_id = $_GET['edit'];
+                             include "includes/update_categories.php";
+                         }
+                         ?>
+
                     </div>
                     <div class="col-xs-6">
                         <table class="table table-bordered table-hover">
@@ -61,7 +69,8 @@ include "../includes/db.php";?>
                                 <th>ID</th>
                                 <th>Title</th>
                                 <th>Delete</th>
-<!--                                <th>Update</th>-->
+                                <th>Update</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -75,6 +84,7 @@ include "../includes/db.php";?>
                                         echo "<td>{$id}</td>";
                                         echo "<td>{$name}</td>";
                                         echo "<td ><a  href='categories.php?delete={$id}'><span class='glyphicon glyphicon-trash'></a></span></td>";
+                                        echo "<td ><a  href='categories.php?edit={$id}'><span class='glyphicon glyphicon-pencil'></a></span></td>";
                                         echo "</tr>";
                                         }
                                 ?>
